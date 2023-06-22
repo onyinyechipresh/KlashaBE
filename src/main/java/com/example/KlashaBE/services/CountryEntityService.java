@@ -3,7 +3,7 @@ package com.example.KlashaBE.services;
 import com.example.KlashaBE.apiRequest.*;
 import com.example.KlashaBE.apiResponse.*;
 
-public interface CountryPopulationService {
+public interface CountryEntityService {
     CountryEntityResponse getCountryEntity(String country);
     CountryPopulationResponse getCountryPopulation(CountryPopulationRequest country);
     CountryCapitalCityResponse getCountryCapitalCities(CountryCapitalCityRequest country);

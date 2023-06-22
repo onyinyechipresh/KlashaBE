@@ -3,6 +3,7 @@ package com.example.KlashaBE.services.serviceImplementation;
 import com.example.KlashaBE.apiRequest.DataRequest;
 import com.example.KlashaBE.apiResponse.BaseResponse;
 import com.example.KlashaBE.apiResponse.DataResponse;
+import com.example.KlashaBE.exception.CustomAppException;
 import com.example.KlashaBE.services.CityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,22 +33,22 @@ public class CityServiceImpl implements CityService {
             HttpEntity<DataRequest> ghanaEntity = buildRequest("ghana", limit);
             ResponseEntity<DataResponse> ghanaResponse = restTemplate.exchange(allCityApi, HttpMethod.POST, ghanaEntity, DataResponse.class);
             log.info("stateResponse {}",ghanaResponse);
-//       if(ghanaResponse.getBody().isError()){
-//           throw new CustomAppException("Error");
-//       }
+       if(ghanaResponse.getBody().isError()){
+           throw new CustomAppException("Error");
+       }
 
             HttpEntity<DataRequest> italyEntity = buildRequest("italy", limit);
             ResponseEntity<DataResponse> italyResponse = restTemplate.exchange(allCityApi, HttpMethod.POST, italyEntity, DataResponse.class);
-//        if(italyResponse.getBody().isError()){
-//            throw new CustomAppException("Error");
-//        }
+        if(italyResponse.getBody().isError()){
+            throw new CustomAppException("Error");
+        }
 
             HttpEntity<DataRequest> newZealandEntity = buildRequest("New Zealand", limit);
             ResponseEntity<DataResponse> newZealandResponse = restTemplate.exchange(allCityApi, HttpMethod.POST, newZealandEntity, DataResponse.class);
-//        if(newZealandResponse.getBody().isError()){
-//            throw new CustomAppException("Error");
-//        }
-//        Thread.sleep(5);
+        if(newZealandResponse.getBody().isError()){
+            throw new CustomAppException("Error");
+        }
+        Thread.sleep(5);
             return BaseResponse.builder()
                     .ghana(ghanaResponse.getBody())
                     .italy(italyResponse.getBody())

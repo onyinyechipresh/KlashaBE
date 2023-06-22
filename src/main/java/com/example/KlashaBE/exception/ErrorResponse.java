@@ -1,4 +1,4 @@
-package com.example.KlashaBE.apiResponse;
+package com.example.KlashaBE.exception;
 
 import lombok.Data;
 import lombok.Getter;

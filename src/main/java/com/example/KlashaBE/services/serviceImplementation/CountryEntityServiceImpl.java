@@ -2,8 +2,10 @@ package com.example.KlashaBE.services.serviceImplementation;
 
 import com.example.KlashaBE.apiRequest.*;
 import com.example.KlashaBE.apiResponse.*;
-import com.example.KlashaBE.services.CountryPopulationService;
+import com.example.KlashaBE.services.CountryEntityService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,8 +16,9 @@ import org.springframework.web.client.RestTemplate;
 
 @Service
 @RequiredArgsConstructor
-public class CountryPopulationServiceImpl implements CountryPopulationService {
+public class CountryEntityServiceImpl implements CountryEntityService {
     private final RestTemplate restTemplate;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Value("${all.country.population.endpoint:https://countriesnow.space/api/v0.1/countries/population}")
     private String countryPopulationApi;
     @Value("${capital.cities.endpoint:https://countriesnow.space/api/v0.1/countries/capital}")
@@ -29,24 +32,29 @@ public class CountryPopulationServiceImpl implements CountryPopulationService {
 
 
     public CountryEntityResponse getCountryEntity(String country){
-        CountryEntityResponse entityResponse = new CountryEntityResponse();
-        entityResponse.setPopulation(getCountryPopulation(CountryPopulationRequest.builder()
-                .country(country)
-                .build()));
-        entityResponse.setCapital(getCountryCapitalCities(CountryCapitalCityRequest.builder()
-                .country(country)
-                .build()));
-        entityResponse.setCurrency(getCountryCurrency(CountryCurrencyRequest.builder()
-                .country(country)
-                .build()));
-        entityResponse.setLocation(getCountryLocation(CountryLocationRequest.builder()
-                .country(country)
-                .build()));
-        entityResponse.setIso(getCountryIso(CountryIsoRequest.builder()
-                .country(country)
-                .build()));
+        try {
+            CountryEntityResponse entityResponse = new CountryEntityResponse();
+            entityResponse.setPopulation(getCountryPopulation(CountryPopulationRequest.builder()
+                    .country(country)
+                    .build()));
+            entityResponse.setCapital(getCountryCapitalCities(CountryCapitalCityRequest.builder()
+                    .country(country)
+                    .build()));
+            entityResponse.setCurrency(getCountryCurrency(CountryCurrencyRequest.builder()
+                    .country(country)
+                    .build()));
+            entityResponse.setLocation(getCountryLocation(CountryLocationRequest.builder()
+                    .country(country)
+                    .build()));
+            entityResponse.setIso(getCountryIso(CountryIsoRequest.builder()
+                    .country(country)
+                    .build()));
 
-        return entityResponse;
+            return entityResponse;
+        }catch (Exception e){
+            logger.error("error fetching data - {} ", e.getMessage());
+        }
+        return new CountryEntityResponse();
 
     }
     public CountryPopulationResponse getCountryPopulation(CountryPopulationRequest country){

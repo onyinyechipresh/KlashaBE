@@ -9,6 +9,8 @@ import com.example.KlashaBE.apiResponse.StateResponse;
 import com.example.KlashaBE.services.StateService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -25,36 +27,42 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class StateServiceImpl implements StateService {
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     private final RestTemplate restTemplate;
     @Value("${all.states.endpoint:https://countriesnow.space/api/v0.1/countries/states}")
     private String allStateApi;
 
-    @Value("${all.cities.in.state.endpoint=https://countriesnow.space/api/v0.1/countries/state/cities}")
+    @Value("${all.cities.in.state.endpoint:https://countriesnow.space/api/v0.1/countries/state/cities}")
     private String allCitiesApi;
 
 
     public CityCountryBaseResponse getAllStatesByCountry(StateRequest country){
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type","application/json");
-        StateRequest request = new StateRequest();
-        request.setCountry(country.getCountry());
-        HttpEntity<StateRequest> entity = new HttpEntity<>(request,headers);
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Content-Type", "application/json");
+            StateRequest request = new StateRequest();
+            request.setCountry(country.getCountry());
+            HttpEntity<StateRequest> entity = new HttpEntity<>(request, headers);
 
-      ResponseEntity<StateResponse> stateResponse = restTemplate.exchange(allStateApi, HttpMethod.POST,entity, StateResponse.class);
-        System.out.println("StateResponse : : "+ stateResponse);
-        log.info("stateResponse {}",stateResponse);
+            ResponseEntity<StateResponse> stateResponse = restTemplate.exchange(allStateApi, HttpMethod.POST, entity, StateResponse.class);
+            System.out.println("StateResponse : : " + stateResponse);
+            log.info("stateResponse {}", stateResponse);
 
-        CityCountryBaseResponse cityCountryBaseResponse = new CityCountryBaseResponse();
-        cityCountryBaseResponse.setCountry(country.getCountry());
+            CityCountryBaseResponse cityCountryBaseResponse = new CityCountryBaseResponse();
+            cityCountryBaseResponse.setCountry(country.getCountry());
 
-        Map<String,List<String>> stateCity = new HashMap<>();
+            Map<String, List<String>> stateCity = new HashMap<>();
 
-        List<State> states = stateResponse.getBody().getData().getState();
-        for(var state:states){
-            stateCity.put(state.getName(),getAllCityByState(country.getCountry(),state.getName()));
+            List<State> states = stateResponse.getBody().getData().getState();
+            for (var state : states) {
+                stateCity.put(state.getName(), getAllCityByState(country.getCountry(), state.getName()));
+            }
+            cityCountryBaseResponse.setState(stateCity);
+            return cityCountryBaseResponse;
+        }catch(Exception e){
+            logger.error("error fetching data - {} ", e.getMessage());
         }
-        cityCountryBaseResponse.setState(stateCity);
-        return cityCountryBaseResponse;
+        return new CityCountryBaseResponse();
     }
 
     public List<String> getAllCityByState(String country, String state){
