@@ -3,5 +3,4 @@ This project used a free API to build a Spring boot app with the following endpo
       And if there are not enough cities, it return the ones available.
 2.    An endpoint that takes a country as a parameter (e.g. Italy, Nigeria, …) and returns its population, capital city, location, currency and ISO2&3.
 3.    An endpoint that takes a country as a parameter (e.g. Italy, Nigeria, …) and returns the full list of all the states in the country and all the cities in each state.
-4.    An endpoint that takes a country as a parameter (e.g. Italy, Nigeria, …), a monetary amount and a target currency and provides the country currency and converts the amount to the target currency and formats it correctly
-5.    using the currency conversion csv file provided.
+4.    An endpoint that takes a country as a parameter (e.g. Italy, Nigeria, …), a monetary amount, and a target currency and provides the country currency and converts the amount to the target currency, and formats it correctly using the currency conversion csv file provided.
