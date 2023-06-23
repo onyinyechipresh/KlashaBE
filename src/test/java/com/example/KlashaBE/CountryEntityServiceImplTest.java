@@ -34,7 +34,7 @@ public class CountryEntityServiceImplTest {
     private String countryIsoApi;
 
     @Test
-    public CountryEntityResponse testGetCountryEntity() {
+    public void testGetCountryEntity() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
@@ -84,6 +84,6 @@ public class CountryEntityServiceImplTest {
         assertEquals(currencyResponse, "NGN");
         assertEquals(locationResponse, 8, String.valueOf(10));
         assertEquals(isoResponse, "NG","NGA");
-        return result;
+        System.out.println(result);;
     }
 }

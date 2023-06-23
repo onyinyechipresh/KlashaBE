@@ -39,7 +39,7 @@ public class StateServiceImplTest {
     }
 
     @Test
-    public List<String> testGetAllStatesByCountry() {
+    public void testGetAllStatesByCountry() {
         StateRequest request = new StateRequest();
         request.setCountry("Nigeria");
         StateResponse stateResponse = new StateResponse();
@@ -53,16 +53,15 @@ public class StateServiceImplTest {
         headers.add("Content-Type", "application/json");
         HttpEntity<StateRequest> entity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<StateResponse> Response = restTemplate.exchange(allStateApi, HttpMethod.POST, entity, StateResponse.class);
-        System.out.println("StateResponse : : " + stateResponse);
+        ResponseEntity<StateResponse> response = restTemplate.exchange(allStateApi, HttpMethod.POST, entity, StateResponse.class);
+        System.out.println("StateResponse : : " + response);
 
         stateService.getAllCityByState("Nigeria", "Lagos");
-        return (Arrays.asList("Surulere", "Ikoyi"));
 
     }
 
     @Test
-    public ResponseEntity<CountryStateResponse> testGetAllCityByState() {
+    public void testGetAllCityByState() {
         CountryStateResponse countryStateResponse = new CountryStateResponse();
         countryStateResponse.setData(Arrays.asList("Ojuelegba", "Ikorodu"));
         HttpHeaders headers = new HttpHeaders();
@@ -71,6 +70,6 @@ public class StateServiceImplTest {
         cityRequest.setState("Lagos");
         HttpEntity<CountryStateRequest> entity = new HttpEntity<>(cityRequest, headers);
         ResponseEntity<CountryStateResponse> stateResponse = restTemplate.exchange(allCitiesApi,HttpMethod.POST,entity,CountryStateResponse.class);
-        return stateResponse;
+        System.out.println(stateResponse);
     }
 }

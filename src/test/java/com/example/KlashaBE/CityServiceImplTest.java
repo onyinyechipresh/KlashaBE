@@ -21,8 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CityServiceImplTest {
     @Mock
     private RestTemplate restTemplate;
-
-    @Autowired
     @InjectMocks
     private CityServiceImpl cityService;
 
@@ -33,14 +31,13 @@ public class CityServiceImplTest {
     private String allCityApi;
 
     @Test
-    public ResponseEntity<DataResponse> testGetAllCities() {
-        long limit = 10L;
+    public void testGetAllCities() {
 
         DataRequest ghanaRequest = new DataRequest();
         ghanaRequest.setCountry("ghana");
         ghanaRequest.setOrder("dsc");
         ghanaRequest.setOrderBy("value");
-        ghanaRequest.setLimit(limit);
+        ghanaRequest.setLimit(10L);
 
         DataResponse ghanaResponse = new DataResponse();
         ghanaResponse.setError(false);
@@ -51,19 +48,19 @@ public class CityServiceImplTest {
         request.setCountry("Ghana");
         request.setOrder("dsc");
         request.setOrderBy("value");
-        request.setLimit(limit);
+        request.setLimit(10L);
         HttpEntity<DataRequest> ghanaEntity = new HttpEntity<>(request,headers);
 
         ResponseEntity<DataResponse> ghanaResponseEntity = restTemplate.exchange(allCityApi, HttpMethod.POST, ghanaEntity, DataResponse.class);
 
-        BaseResponse result = cityService.getAllCities((long) 5.0);
+        BaseResponse result = cityService.getAllCities(5L);
 
         // Assert
         assertNotNull(result);
         assertFalse(result.getGhana().isError());
         assertNull(result.getItaly());
         assertNull(result.getNewZealand());
-        return ghanaResponseEntity;
+        System.out.println(ghanaResponseEntity);
 
     }
 }
